@@ -1,23 +1,358 @@
 <!DOCTYPE html>
-<html>
-<body>
-<h1>Statystyka - kurs podstawowy</h1>
-  <p><a href="/statystyka/rintro.html">1. Poznając R</a></p>
-  <p><a href="/statystyka/opisowe_short.html">2. Podstawowe miary rozrzutu danych</a></p>
-  <p><a href="/statystyka/opisowe2.html">3. Statystyki opisowe i wykresy rozkładu cechy</a></p>
-  <p><a href="/statystyka/zatrucie.html">4. Zanieczyszczenie środowiska - baza danych</a></p>  
-  <p><a href="/statystyka/Titanic.html">5. Titanic - baza danych</a></p>
-  <p><a href="/statystyka/prawd_rozklady_s.html">6. Rozklady zmiennej losowej</a></p>
-  <p><a href="/statystyka/normal2.html">7. Rozklad normalny</a></p>
-  <p><a href="/statystyka/punktowa.html">8. Wnioskowanie statystyczne - estymacja punktowa</a></p>
-  <p><a href="/statystyka/przedzialowa.html">9. Wnioskowanie statystyczne - estymacja przedziałowa</a></p>
-  <p><a href="/statystyka/regresja.html">10. Wnioskowanie statystyczne - regresja liniowa</a></p>
-  <br>
-  <p><b>Bazy danych wykorzystane w prezentacjach znajdują się </b> <a href="/statystyka/bazy.html">TUTAJ</a> </p>
-  <img src="/statystyka/img/Rlogo.png" width=200 height=200>
-  <p>
-  <i>This work is licensed under a Creative Commons Attribution 4.0 International License</i>
-    <img src="/statystyka/img/by-nc.png" width=70 height=20> </p>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Statystyka — kurs podstawowy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #12161f;
+    --bg-panel: #191f2b;
+    --bg-panel-hover: #202838;
+    --line: #2b3243;
+    --text: #e9e7de;
+    --text-dim: #8c96a8;
+    --text-faint: #5b6577;
+    --v1: #440154;
+    --v2: #3b528b;
+    --v3: #21918c;
+    --v4: #5ec962;
+    --v5: #fde725;
+    --gradient: linear-gradient(90deg, var(--v1), var(--v2), var(--v3), var(--v4), var(--v5));
+  }
 
+  *{ box-sizing: border-box; }
+
+  html{ scroll-behavior: smooth; }
+
+  body{
+    margin: 0;
+    background: var(--bg);
+    background-image:
+      radial-gradient(circle at 15% 8%, rgba(94,201,98,0.06), transparent 40%),
+      radial-gradient(circle at 85% 92%, rgba(59,82,139,0.08), transparent 40%);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a{ color: inherit; }
+
+  .wrap{
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 5rem 1.5rem 4rem;
+  }
+
+  /* ---------- Header ---------- */
+  header{
+    position: relative;
+    padding-bottom: 2.75rem;
+    margin-bottom: 2.75rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .eyebrow{
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    gap: 0.6em;
+    margin-bottom: 1.4rem;
+  }
+
+  .eyebrow::before{
+    content: "";
+    width: 1.6em;
+    height: 1px;
+    background: var(--v4);
+  }
+
+  h1{
+    font-family: 'Fraunces', serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-size: clamp(2.1rem, 5.5vw, 3.1rem);
+    line-height: 1.06;
+    margin: 0 0 0.9rem;
+    letter-spacing: -0.01em;
+  }
+
+  h1 em{
+    font-style: italic;
+    font-weight: 400;
+    color: var(--text-dim);
+  }
+
+  .subtitle{
+    color: var(--text-dim);
+    font-size: 1.02rem;
+    max-width: 42ch;
+    margin: 0 0 2.2rem;
+  }
+
+  /* bell curve signature */
+  .curve{
+    width: 100%;
+    height: auto;
+    display: block;
+    max-width: 420px;
+  }
+  .curve path.fill{
+    fill: url(#curveGradient);
+    opacity: 0.14;
+  }
+  .curve path.line{
+    fill: none;
+    stroke: url(#curveGradient);
+    stroke-width: 1.6;
+    stroke-linecap: round;
+  }
+  .curve .dots circle{
+    fill: var(--text-faint);
+  }
+
+  /* ---------- Lesson list ---------- */
+  .lessons{
+    list-style: none;
+    margin: 0 0 3rem;
+    padding: 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .lessons li{
+    border-bottom: 1px solid var(--line);
+  }
+
+  .lessons a{
+    display: flex;
+    align-items: baseline;
+    gap: 1.15rem;
+    text-decoration: none;
+    padding: 1.05rem 0.25rem;
+    transition: padding-left 0.18s ease, color 0.18s ease;
+    position: relative;
+  }
+
+  .lessons a::before{
+    content: "";
+    position: absolute;
+    left: -1.5rem;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--gradient);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.22s ease;
+  }
+
+  .lessons a:hover,
+  .lessons a:focus-visible{
+    padding-left: 0.75rem;
+    color: #fff;
+  }
+
+  .lessons a:hover::before,
+  .lessons a:focus-visible::before{
+    transform: scaleY(1);
+  }
+
+  .lessons a:focus-visible{
+    outline: 2px solid var(--v4);
+    outline-offset: 2px;
+  }
+
+  .num{
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--text-faint);
+    min-width: 1.6em;
+    flex-shrink: 0;
+  }
+
+  .lessons a:hover .num,
+  .lessons a:focus-visible .num{
+    color: var(--v4);
+  }
+
+  .title{
+    font-size: 1.02rem;
+    font-weight: 500;
+    flex: 1;
+  }
+
+  .arrow{
+    font-size: 0.95rem;
+    color: var(--text-faint);
+    transform: translateX(-4px);
+    opacity: 0;
+    transition: opacity 0.18s ease, transform 0.18s ease;
+  }
+
+  .lessons a:hover .arrow,
+  .lessons a:focus-visible .arrow{
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  /* ---------- Data panel ---------- */
+  .panel{
+    background: var(--bg-panel);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 1.4rem 1.6rem;
+    margin-bottom: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .panel p{
+    margin: 0;
+    font-size: 0.96rem;
+    color: var(--text-dim);
+  }
+
+  .panel strong{
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .btn{
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    color: var(--bg);
+    background: var(--v4);
+    padding: 0.55em 1.1em;
+    border-radius: 6px;
+    white-space: nowrap;
+    transition: background 0.18s ease, transform 0.18s ease;
+  }
+
+  .btn:hover, .btn:focus-visible{
+    background: var(--v5);
+    transform: translateY(-1px);
+  }
+
+  /* ---------- Footer ---------- */
+  footer{
+    display: flex;
+    align-items: center;
+    gap: 1.4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--line);
+  }
+
+  footer img{
+    width: 56px;
+    height: 56px;
+    object-fit: contain;
+    opacity: 0.9;
+    flex-shrink: 0;
+  }
+
+  .license{
+    font-size: 0.82rem;
+    color: var(--text-faint);
+    line-height: 1.5;
+  }
+
+  .license .cc{
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 0.4rem;
+  }
+
+  .license .cc img{
+    width: 58px;
+    height: 17px;
+    opacity: 0.75;
+  }
+
+  @media (max-width: 520px){
+    .wrap{ padding: 3rem 1.25rem 3rem; }
+    .lessons a::before{ left: -1.25rem; }
+    footer{ flex-direction: column; align-items: flex-start; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ transition: none !important; scroll-behavior: auto !important; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Materiały kursu · R</div>
+    <h1>Statystyka<br><em>kurs podstawowy</em></h1>
+    <p class="subtitle">Dziesięć lekcji — od pierwszego kontaktu z R po regresję liniową — na realnych bazach danych.</p>
+
+    <svg class="curve" viewBox="0 0 420 90" aria-hidden="true">
+      <defs>
+        <linearGradient id="curveGradient" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#440154"/>
+          <stop offset="25%" stop-color="#3b528b"/>
+          <stop offset="50%" stop-color="#21918c"/>
+          <stop offset="75%" stop-color="#5ec962"/>
+          <stop offset="100%" stop-color="#fde725"/>
+        </linearGradient>
+      </defs>
+      <path class="fill" d="M0,82 C60,82 90,10 210,10 C330,10 360,82 420,82 L420,90 L0,90 Z"/>
+      <path class="line" d="M0,82 C60,82 90,10 210,10 C330,10 360,82 420,82"/>
+      <g class="dots">
+        <circle cx="40" cy="80" r="1.6"/>
+        <circle cx="70" cy="70" r="1.6"/>
+        <circle cx="110" cy="42" r="1.6"/>
+        <circle cx="150" cy="24" r="1.6"/>
+        <circle cx="210" cy="10" r="1.6"/>
+        <circle cx="270" cy="24" r="1.6"/>
+        <circle cx="310" cy="42" r="1.6"/>
+        <circle cx="350" cy="70" r="1.6"/>
+        <circle cx="380" cy="80" r="1.6"/>
+      </g>
+    </svg>
+  </header>
+
+  <ol class="lessons">
+    <li><a href="/statystyka/rintro.html"><span class="num">01</span><span class="title">Poznając R</span><span class="arrow">→</span></a></li>
+    <li><a href="/statystyka/opisowe_short.html"><span class="num">02</span><span class="title">Podstawowe miary rozrzutu danych</span><span class="arrow">→</span></a></li>
+    <li><a href="/statystyka/opisowe2.html"><span class="num">03</span><span class="title">Statystyki opisowe i wykresy rozkładu cechy</span><span class="arrow">→</span></a></li>
+    <li><a href="/statystyka/zatrucie.html"><span class="num">04</span><span class="title">Zanieczyszczenie środowiska — baza danych</span><span class="arrow">→</span></a></li>
+    <li><a href="/statystyka/Titanic.html"><span class="num">05</span><span class="title">Titanic — baza danych</span><span class="arrow">→</span></a></li>
+    <li><a href="/statystyka/prawd_rozklady_s.html"><span class="num">06</span><span class="title">Rozkłady zmiennej losowej</span><span class="arrow">→</span></a></li>
+    <li><a href="/statystyka/normal2.html"><span class="num">07</span><span class="title">Rozkład normalny</span><span class="arrow">→</span></a></li>
+    <li><a href="/statystyka/punktowa.html"><span class="num">08</span><span class="title">Wnioskowanie statystyczne — estymacja punktowa</span><span class="arrow">→</span></a></li>
+    <li><a href="/statystyka/przedzialowa.html"><span class="num">09</span><span class="title">Wnioskowanie statystyczne — estymacja przedziałowa</span><span class="arrow">→</span></a></li>
+    <li><a href="/statystyka/regresja.html"><span class="num">10</span><span class="title">Wnioskowanie statystyczne — regresja liniowa</span><span class="arrow">→</span></a></li>
+  </ol>
+
+  <div class="panel">
+    <p><strong>Bazy danych</strong> wykorzystane w prezentacjach znajdują się w jednym miejscu.</p>
+    <a class="btn" href="/statystyka/bazy.html">ZOBACZ BAZY →</a>
+  </div>
+
+  <footer>
+    <img src="/statystyka/img/Rlogo.png" alt="Logo R" width="56" height="56">
+    <div class="license">
+      This work is licensed under a Creative Commons Attribution 4.0 International License.
+      <span class="cc"><img src="/statystyka/img/by-nc.png" alt="CC BY-NC"></span>
+    </div>
+  </footer>
+
+</div>
 </body>
 </html>
