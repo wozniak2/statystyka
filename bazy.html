@@ -1,18 +1,332 @@
 <!DOCTYPE html>
-<html>
-<body>
-<h1>Statystyka - bazy danych</h1>
-  <p><a href="/statystyka/bazy/pop1.csv">1. pop1.csv</a></p>
-  <p><a href="/statystyka/bazy/pop2.csv">2. pop2.csv</a></p>
-  <p><a href="/statystyka/bazy/cars.csv">3. cars.csv</a></p>
-  <p><a href="/statystyka/bazy/Male.csv">4. Male.csv</a></p>
-  <p><a href="/statystyka/bazy/aids.csv">5. aids.csv</a></p>
-  <p><a href="/statystyka/bazy/UScereal.csv">6. UScereal.csv</a></p>
-  <p><a href="/statystyka/bazy/Titanic.csv">7. Titanic.csv</a></p>
-  <img src="/statystyka/img/Rlogo.png" width=150 height=150>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bazy danych — Statystyka</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #12161f;
+    --bg-panel: #191f2b;
+    --bg-panel-hover: #202838;
+    --line: #2b3243;
+    --text: #e9e7de;
+    --text-dim: #8c96a8;
+    --text-faint: #5b6577;
+    --v1: #440154;
+    --v2: #3b528b;
+    --v3: #21918c;
+    --v4: #5ec962;
+    --v5: #fde725;
+    --gradient: linear-gradient(90deg, var(--v1), var(--v2), var(--v3), var(--v4), var(--v5));
+  }
 
+  *{ box-sizing: border-box; }
+
+  html{ scroll-behavior: smooth; }
+
+  body{
+    margin: 0;
+    background: var(--bg);
+    background-image:
+      radial-gradient(circle at 15% 8%, rgba(94,201,98,0.06), transparent 40%),
+      radial-gradient(circle at 85% 92%, rgba(59,82,139,0.08), transparent 40%);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a{ color: inherit; }
+
+  .wrap{
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 5rem 1.5rem 4rem;
+  }
+
+  /* ---------- Header ---------- */
+  header{
+    position: relative;
+    padding-bottom: 2.75rem;
+    margin-bottom: 2.75rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .eyebrow{
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    gap: 0.6em;
+    margin-bottom: 1.4rem;
+  }
+
+  .eyebrow::before{
+    content: "";
+    width: 1.6em;
+    height: 1px;
+    background: var(--v4);
+  }
+
+  .back{
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text-faint);
+    text-decoration: none;
+    margin-bottom: 1.6rem;
+    transition: color 0.18s ease;
+  }
+  .back:hover, .back:focus-visible{ color: var(--v4); }
+
+  h1{
+    font-family: 'Fraunces', serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-size: clamp(2.1rem, 5.5vw, 3.1rem);
+    line-height: 1.06;
+    margin: 0 0 0.9rem;
+    letter-spacing: -0.01em;
+  }
+
+  h1 em{
+    font-style: italic;
+    font-weight: 400;
+    color: var(--text-dim);
+  }
+
+  .subtitle{
+    color: var(--text-dim);
+    font-size: 1.02rem;
+    max-width: 46ch;
+    margin: 0 0 2.2rem;
+  }
+
+  /* grid signature: small "data table" motif */
+  .grid-motif{
+    width: 100%;
+    height: auto;
+    display: block;
+    max-width: 420px;
+  }
+  .grid-motif rect.cell{
+    fill: none;
+    stroke: var(--line);
+    stroke-width: 1;
+  }
+  .grid-motif rect.filled{
+    stroke: none;
+  }
+
+  /* ---------- File list ---------- */
+  .files{
+    list-style: none;
+    margin: 0 0 3rem;
+    padding: 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .files li{
+    border-bottom: 1px solid var(--line);
+  }
+
+  .files a{
+    display: flex;
+    align-items: baseline;
+    gap: 1.15rem;
+    text-decoration: none;
+    padding: 1.05rem 0.25rem;
+    transition: padding-left 0.18s ease, color 0.18s ease;
+    position: relative;
+  }
+
+  .files a::before{
+    content: "";
+    position: absolute;
+    left: -1.5rem;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--gradient);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.22s ease;
+  }
+
+  .files a:hover,
+  .files a:focus-visible{
+    padding-left: 0.75rem;
+    color: #fff;
+  }
+
+  .files a:hover::before,
+  .files a:focus-visible::before{
+    transform: scaleY(1);
+  }
+
+  .files a:focus-visible{
+    outline: 2px solid var(--v4);
+    outline-offset: 2px;
+  }
+
+  .num{
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--text-faint);
+    min-width: 1.6em;
+    flex-shrink: 0;
+  }
+
+  .files a:hover .num,
+  .files a:focus-visible .num{
+    color: var(--v4);
+  }
+
+  .title{
+    font-size: 1.02rem;
+    font-weight: 500;
+    font-family: 'JetBrains Mono', monospace;
+    flex: 1;
+  }
+
+  .ext{
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    color: var(--bg);
+    background: var(--v4);
+    padding: 0.2em 0.55em;
+    border-radius: 5px;
+    opacity: 0.85;
+    flex-shrink: 0;
+  }
+
+  .arrow{
+    font-size: 0.95rem;
+    color: var(--text-faint);
+    transform: translateX(-4px);
+    opacity: 0;
+    transition: opacity 0.18s ease, transform 0.18s ease;
+  }
+
+  .files a:hover .arrow,
+  .files a:focus-visible .arrow{
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  /* ---------- Footer ---------- */
+  footer{
+    display: flex;
+    align-items: center;
+    gap: 1.4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--line);
+  }
+
+  footer img{
+    width: 56px;
+    height: 56px;
+    object-fit: contain;
+    opacity: 0.9;
+    flex-shrink: 0;
+  }
+
+  .note{
+    font-size: 0.82rem;
+    color: var(--text-faint);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 520px){
+    .wrap{ padding: 3rem 1.25rem 3rem; }
+    .files a::before{ left: -1.25rem; }
+    footer{ flex-direction: column; align-items: flex-start; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ transition: none !important; scroll-behavior: auto !important; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Materiały kursu · R</div>
+    <a class="back" href="/statystyka/index.html">← wróć do kursu</a>
+    <h1>Bazy<br><em>danych</em></h1>
+    <p class="subtitle">Zbiory danych wykorzystane w prezentacjach kursu — do pobrania i wczytania bezpośrednio w R.</p>
+
+    <svg class="grid-motif" viewBox="0 0 420 70" aria-hidden="true">
+      <defs>
+        <linearGradient id="cellGradient" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#440154"/>
+          <stop offset="25%" stop-color="#3b528b"/>
+          <stop offset="50%" stop-color="#21918c"/>
+          <stop offset="75%" stop-color="#5ec962"/>
+          <stop offset="100%" stop-color="#fde725"/>
+        </linearGradient>
+      </defs>
+      <!-- 7 columns x 3 rows grid, echoing 7 datasets, with a scattering of filled cells in the viridis gradient -->
+      <g>
+        <rect class="cell" x="0" y="0" width="58" height="22"/>
+        <rect class="cell" x="60" y="0" width="58" height="22"/>
+        <rect class="cell" x="120" y="0" width="58" height="22"/>
+        <rect class="cell" x="180" y="0" width="58" height="22"/>
+        <rect class="cell" x="240" y="0" width="58" height="22"/>
+        <rect class="cell" x="300" y="0" width="58" height="22"/>
+        <rect class="cell" x="360" y="0" width="58" height="22"/>
+
+        <rect class="cell" x="0" y="24" width="58" height="22"/>
+        <rect class="cell" x="60" y="24" width="58" height="22"/>
+        <rect class="cell" x="120" y="24" width="58" height="22"/>
+        <rect class="cell" x="180" y="24" width="58" height="22"/>
+        <rect class="cell" x="240" y="24" width="58" height="22"/>
+        <rect class="cell" x="300" y="24" width="58" height="22"/>
+        <rect class="cell" x="360" y="24" width="58" height="22"/>
+
+        <rect class="cell" x="0" y="48" width="58" height="22"/>
+        <rect class="cell" x="60" y="48" width="58" height="22"/>
+        <rect class="cell" x="120" y="48" width="58" height="22"/>
+        <rect class="cell" x="180" y="48" width="58" height="22"/>
+        <rect class="cell" x="240" y="48" width="58" height="22"/>
+        <rect class="cell" x="300" y="48" width="58" height="22"/>
+        <rect class="cell" x="360" y="48" width="58" height="22"/>
+
+        <rect class="cell filled" x="60" y="0" width="58" height="22" fill="#440154" opacity="0.55"/>
+        <rect class="cell filled" x="180" y="24" width="58" height="22" fill="#21918c" opacity="0.55"/>
+        <rect class="cell filled" x="300" y="48" width="58" height="22" fill="#5ec962" opacity="0.55"/>
+        <rect class="cell filled" x="360" y="0" width="58" height="22" fill="#fde725" opacity="0.45"/>
+        <rect class="cell filled" x="0" y="48" width="58" height="22" fill="#3b528b" opacity="0.55"/>
+      </g>
+    </svg>
+  </header>
+
+  <ol class="files">
+    <li><a href="/statystyka/bazy/pop1.csv"><span class="num">01</span><span class="title">pop1</span><span class="ext">.csv</span><span class="arrow">→</span></a></li>
+    <li><a href="/statystyka/bazy/pop2.csv"><span class="num">02</span><span class="title">pop2</span><span class="ext">.csv</span><span class="arrow">→</span></a></li>
+    <li><a href="/statystyka/bazy/cars.csv"><span class="num">03</span><span class="title">cars</span><span class="ext">.csv</span><span class="arrow">→</span></a></li>
+    <li><a href="/statystyka/bazy/Male.csv"><span class="num">04</span><span class="title">Male</span><span class="ext">.csv</span><span class="arrow">→</span></a></li>
+    <li><a href="/statystyka/bazy/aids.csv"><span class="num">05</span><span class="title">aids</span><span class="ext">.csv</span><span class="arrow">→</span></a></li>
+    <li><a href="/statystyka/bazy/UScereal.csv"><span class="num">06</span><span class="title">UScereal</span><span class="ext">.csv</span><span class="arrow">→</span></a></li>
+    <li><a href="/statystyka/bazy/Titanic.csv"><span class="num">07</span><span class="title">Titanic</span><span class="ext">.csv</span><span class="arrow">→</span></a></li>
+  </ol>
+
+  <footer>
+    <img src="/statystyka/img/Rlogo.png" alt="Logo R" width="56" height="56">
+    <p class="note">Wczytaj dowolny zbiór bezpośrednio z adresu URL, np. <code>read.csv("...")</code>, lub pobierz plik na dysk.</p>
+  </footer>
+
+</div>
 </body>
 </html>
-
-
-
