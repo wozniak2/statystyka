@@ -1,4 +1,4 @@
-TODO:
+**TODO:**
 - druga część kursu jest nieco zbyt abstrakcyjna
 - w pierwszej części kursu brakuje analizy korelacji (e.g. r Pearsona, rho Spearmana)
 - w pierwszej części kursu brakuje testowania skośności, kutozy rozkładu
